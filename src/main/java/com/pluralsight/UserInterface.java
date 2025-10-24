@@ -33,7 +33,45 @@ public class UserInterface {
     }
 
     private static void processRemoveVehicleRequest() {
-        System.out.println("Enter the details of the vehicle of ");
+        String userChoice = "N";
+        System.out.println("Enter any details of the car you want to use to locate the car for deletion: ");
+        String userInput = scanner.nextLine();
+        boolean deletionStatus = false;
+
+        for (var car : dealership.getAllVehicles()) {
+            // Convert numeric fields to String for comparison
+            String vinAsString = String.valueOf(car.getVin());
+            String yearAsString = String.valueOf(car.getYear());
+            String odometerAsString = String.valueOf(car.getOdometer());
+            // Convert double price to String
+            String priceAsString = String.valueOf(car.getPrice());
+
+            if (userInput.equalsIgnoreCase(car.getMake()) ||
+                    userInput.equalsIgnoreCase(car.getModel()) ||
+                    userInput.equalsIgnoreCase(car.getVehicleType()) ||
+                    userInput.equalsIgnoreCase(car.getColor()) ||
+                    userInput.equalsIgnoreCase(vinAsString) ||
+                    userInput.equalsIgnoreCase(yearAsString) ||
+                    userInput.equalsIgnoreCase(odometerAsString) ||
+                    userInput.equalsIgnoreCase(priceAsString)
+            ) {
+                System.out.println("Is this the car you want to remove?: ");
+                printFormatted(car);
+                userChoice = scanner.nextLine();
+                if (!userChoice.isEmpty() && Character.toLowerCase(userChoice.charAt(0)) == 'y') {
+                    //delete
+                    dealership.removeVehicle(car);
+                    deletionStatus = true;
+                    System.out.println("Deletion successful!");
+                } else {
+                    System.out.println("Deletion cancelled...");
+                }
+            }
+        }
+        if (!deletionStatus) {
+            System.out.println("No cars marked for deletion!");
+        }
+
     }
 
     private static void processAddVehicleRequest() {
@@ -53,10 +91,20 @@ public class UserInterface {
         make = readInputRequireType("string");
         System.out.println("Enter the model number: ");
         model = readInputRequireType("string");
+        System.out.println("Enter the vehicle type: ");
         vehicleType = readInputRequireType("string");
+        System.out.println("Enter the color: ");
         color = readInputRequireType("string");
+        System.out.println("Enter the odometer number: ");
+        odometer = Integer.parseInt(readInputRequireType("int"));
+        System.out.println("Enter the price: ");
+        price = Double.parseDouble(readInputRequireType("double"));
 
+        Vehicle car = new Vehicle(vin, year, make, model, vehicleType, color, odometer, price);
+        dealership.addVehicle(car);
+        System.out.println("Car Added successfully!");
     }
+
     private static void processTypeRequest() {
         String type;
         System.out.println("Enter the type: ");
@@ -74,13 +122,13 @@ public class UserInterface {
         }
     }
 
-    private static void processAllVehiclesRequest()  {
+    private static void processAllVehiclesRequest() {
         boolean anyFound = false;
         for (var car : dealership.getAllVehicles()) {
             printFormatted(car);
             anyFound = true;
         }
-        if (!anyFound){
+        if (!anyFound) {
             System.out.println("No car available in the inventory!");
         }
     }
@@ -223,6 +271,7 @@ public class UserInterface {
     public static void init() {
         dealership = DealershipFileManager.getDealership();
     }
+
     //created this method to prevent all parsing errors, exceptions, etc for any type of data input from user.
     //This method only takes three strings as valid argument for expectedType: "int", "double and "string"
     //for char type I recommend using "string" then using charAt()
