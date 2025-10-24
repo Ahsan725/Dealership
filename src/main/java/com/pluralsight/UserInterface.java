@@ -1,85 +1,194 @@
 package com.pluralsight;
 
-import javax.sound.midi.Soundbank;
+import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.text.NumberFormat;
 
 public class UserInterface {
-    private Dealership dealership;
     private static final Scanner scanner = new Scanner(System.in);
+    private static Dealership dealership;
 
-    public void display(){
+    public static void display() {
         init();
         int operation = -1;
         while (operation != 99) {
             printMenu();
             operation = Integer.parseInt(readInputRequireType("int"));
             switch (operation) {
-                case 1 ->   processPriceRangeRequest();
-                case 2 ->   processMakeModelRequest();
-                case 3 ->   processYearRangeRequest();
-                case 4 ->   processColorRequest();
-                case 5 ->   processMileageRangeRequest();
-                case 6 ->   processTypeRequest();
-                case 7 ->   processAllVehiclesRequest();
-                case 8 ->   processAddVehicleRequest();
-                case 9 ->   processRemoveVehicleRequest();
-                case 99 ->  System.out.println("System is exiting...");
-                default ->  System.out.println("Invalid operation... Try again or press 0 to quit");
+                case 1 -> processPriceRangeRequest();
+                case 2 -> processMakeModelRequest();
+                case 3 -> processYearRangeRequest();
+                case 4 -> processColorRequest();
+                case 5 -> processMileageRangeRequest();
+                case 6 -> processTypeRequest();
+                case 7 -> processAllVehiclesRequest();
+                case 8 -> processAddVehicleRequest();
+                case 9 -> processRemoveVehicleRequest();
+                case 99 -> System.out.println("System is exiting...");
+                default -> System.out.println("Invalid operation... Try again or press 0 to quit");
             }
         }
     }
 
-    private void processRemoveVehicleRequest() {
+    private static void processRemoveVehicleRequest() {
+        System.out.println("Enter the details of the vehicle of ");
     }
 
-    private void processAddVehicleRequest() {
+    private static void processAddVehicleRequest() {
+        int vin;
+        int year;
+        String make;
+        String model;
+        String vehicleType;
+        String color;
+        int odometer;
+        double price;
+        System.out.println("Enter the vin number: ");
+        vin = Integer.parseInt(readInputRequireType("int"));
+        System.out.println("Enter the year: ");
+        year = Integer.parseInt(readInputRequireType("int"));
+        System.out.println("Enter the make number: ");
+        make = readInputRequireType("string");
+        System.out.println("Enter the model number: ");
+        model = readInputRequireType("string");
+        vehicleType = readInputRequireType("string");
+        color = readInputRequireType("string");
+
+    }
+    private static void processTypeRequest() {
+        String type;
+        System.out.println("Enter the type: ");
+        type = readInputRequireType("string");
+        boolean anyFound = false;
+
+        for (var car : dealership.getAllVehicles()) {
+            if (car.getVehicleType().toLowerCase().contains(type)) {
+                printFormatted(car);
+                anyFound = true;
+            }
+        }
+        if (!anyFound) {
+            System.out.println("No cars matched that type!");
+        }
     }
 
-    private void processTypeRequest() {
+    private static void processAllVehiclesRequest()  {
+        boolean anyFound = false;
+        for (var car : dealership.getAllVehicles()) {
+            printFormatted(car);
+            anyFound = true;
+        }
+        if (!anyFound){
+            System.out.println("No car available in the inventory!");
+        }
     }
 
-    private void processAllVehiclesRequest() {
+    private static void processMileageRangeRequest() {
+        int minRange;
+        int maxRange;
+        System.out.println("Enter the min mile range: ");
+        minRange = Integer.parseInt(readInputRequireType("int"));
+        System.out.println("Enter the max mile range: ");
+        maxRange = Integer.parseInt(readInputRequireType("int"));
+        //swap if the user makes a mistake
+        minRange = Math.min(minRange, maxRange);
+        maxRange = Math.max(minRange, maxRange);
+        boolean anyFound = false;
+
+        for (var car : dealership.getAllVehicles()) {
+            if (car.getOdometer() >= minRange && car.getOdometer() <= maxRange) {
+                printFormatted(car);
+                anyFound = true;
+            }
+        }
+        if (!anyFound) {
+            System.out.println("No cars matched that mile range!");
+        }
     }
 
-    private void processMileageRangeRequest() {
+    private static void processColorRequest() {
+        String color;
+        System.out.println("Enter the color: ");
+        color = readInputRequireType("string");
+        boolean anyFound = false;
+
+        for (var car : dealership.getAllVehicles()) {
+            if (car.getColor().equalsIgnoreCase(color)) {
+                printFormatted(car);
+                anyFound = true;
+            }
+        }
+        if (!anyFound) {
+            System.out.println("No cars matched that color!");
+        }
     }
 
-    private void processColorRequest() {
+    private static void processYearRangeRequest() {
+        int minRange;
+        int maxRange;
+        System.out.println("Enter the earliest year in the range: ");
+        minRange = Integer.parseInt(readInputRequireType("int"));
+        System.out.println("Enter the latest year in the range: ");
+        maxRange = Integer.parseInt(readInputRequireType("int"));
+        //swap if the user makes a mistake
+        minRange = Math.min(minRange, maxRange);
+        maxRange = Math.max(minRange, maxRange);
+        boolean anyFound = false;
+
+        for (var car : dealership.getAllVehicles()) {
+            if (car.getYear() >= minRange && car.getYear() <= maxRange) {
+                printFormatted(car);
+                anyFound = true;
+            }
+        }
+        if (!anyFound) {
+            System.out.println("No cars matched that year range!");
+        }
     }
 
-    private void processYearRangeRequest() {
+    private static void processMakeModelRequest() {
+        String makeModel;
+        System.out.println("Enter the make/model of the car: ");
+        makeModel = readInputRequireType("string");
+        boolean anyFound = false;
+
+        for (var car : dealership.getAllVehicles()) {
+            if (car.getMake().toLowerCase().contains(makeModel.toLowerCase()) || car.getModel().toLowerCase().contains(makeModel.toLowerCase())) {
+                printFormatted(car);
+                anyFound = true;
+            }
+        }
+        if (!anyFound) {
+            System.out.println("No cars matched that make/model range!");
+        }
     }
 
-    private void processMakeModelRequest() {
-    }
-
-    private void processPriceRangeRequest() {
+    private static void processPriceRangeRequest() {
         double minRange;
         double maxRange;
         System.out.println("Enter the min price range: ");
         minRange = Double.parseDouble(readInputRequireType("double"));
+        System.out.println("Enter the max price range: ");
         maxRange = Double.parseDouble(readInputRequireType("double"));
         //swap if the user makes a mistake
         minRange = Math.min(minRange, maxRange);
         maxRange = Math.max(minRange, maxRange);
         boolean anyFound = false;
 
-        for (var car : dealership.getAllVehicles()){
-            if (car.getPrice() >= minRange && car.getPrice() <= maxRange){
+        for (var car : dealership.getAllVehicles()) {
+            if (car.getPrice() >= minRange && car.getPrice() <= maxRange) {
                 printFormatted(car);
                 anyFound = true;
             }
         }
-        if (!anyFound){
+        if (!anyFound) {
             System.out.println("No cars matched that price range!");
         }
     }
 
-    private void printFormatted(Vehicle car) {
+    private static void printFormatted(Vehicle car) {
         NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.US);
 
         System.out.printf("%-8d %-6d %-15s %-18s %-12s %-12s %13s %14s%n",
@@ -93,8 +202,7 @@ public class UserInterface {
                 currency.format(car.getPrice()));
     }
 
-
-    private void printMenu() {
+    private static void printMenu() {
         System.out.println("""
                 Welcome to the Dealership! What would you like to do?
                 1 - Find vehicles within a price range
@@ -112,10 +220,9 @@ public class UserInterface {
                 """);
     }
 
-    public void init(){
-        this.dealership = DealershipFileManager.getDealership();
+    public static void init() {
+        dealership = DealershipFileManager.getDealership();
     }
-
     //created this method to prevent all parsing errors, exceptions, etc for any type of data input from user.
     //This method only takes three strings as valid argument for expectedType: "int", "double and "string"
     //for char type I recommend using "string" then using charAt()
