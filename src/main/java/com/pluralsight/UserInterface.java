@@ -1,9 +1,7 @@
 package com.pluralsight;
 
 import java.text.NumberFormat;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class UserInterface {
@@ -220,16 +218,14 @@ public class UserInterface {
         minRange = Double.parseDouble(readInputRequireType("double"));
         System.out.println("Enter the max price range: ");
         maxRange = Double.parseDouble(readInputRequireType("double"));
-        //swap if the user makes a mistake
-        minRange = Math.min(minRange, maxRange);
-        maxRange = Math.max(minRange, maxRange);
         boolean anyFound = false;
-
-        for (var car : dealership.getAllVehicles()) {
-            if (car.getPrice() >= minRange && car.getPrice() <= maxRange) {
-                printFormatted(car);
-                anyFound = true;
-            }
+        List<Vehicle> result;
+        result = dealership.getVehiclesByPrice(minRange, maxRange);
+        if (!result.isEmpty()){
+            anyFound = true;
+        }
+        for (var car : result){
+            printFormatted(car);
         }
         if (!anyFound) {
             System.out.println("No cars matched that price range!");
