@@ -10,7 +10,7 @@ public class UserInterface {
     private static final Scanner scanner = new Scanner(System.in);
     private static Dealership dealership;
 
-    public static void display() {
+    public void display() {
         init();
         int operation = -1;
         while (operation != 99) {
@@ -32,7 +32,7 @@ public class UserInterface {
         }
     }
 
-    private static void processRemoveVehicleRequest() {
+    private void processRemoveVehicleRequest() {
         String userChoice = "N";
         System.out.println("Enter any details of the car you want to use to locate the car for deletion: ");
         String userInput = scanner.nextLine();
@@ -74,7 +74,7 @@ public class UserInterface {
 
     }
 
-    private static void processAddVehicleRequest() {
+    private void processAddVehicleRequest() {
         int vin;
         int year;
         String make;
@@ -105,7 +105,7 @@ public class UserInterface {
         System.out.println("Car Added successfully!");
     }
 
-    private static void processTypeRequest() {
+    private void processTypeRequest() {
         String type;
         System.out.println("Enter the type: ");
         type = readInputRequireType("string");
@@ -122,7 +122,7 @@ public class UserInterface {
         }
     }
 
-    private static void processAllVehiclesRequest() {
+    private void processAllVehiclesRequest() {
         boolean anyFound = false;
         for (var car : dealership.getAllVehicles()) {
             printFormatted(car);
@@ -133,7 +133,7 @@ public class UserInterface {
         }
     }
 
-    private static void processMileageRangeRequest() {
+    private void processMileageRangeRequest() {
         int minRange;
         int maxRange;
         System.out.println("Enter the min mile range: ");
@@ -156,7 +156,7 @@ public class UserInterface {
         }
     }
 
-    private static void processColorRequest() {
+    private void processColorRequest() {
         String color;
         System.out.println("Enter the color: ");
         color = readInputRequireType("string");
@@ -173,7 +173,7 @@ public class UserInterface {
         }
     }
 
-    private static void processYearRangeRequest() {
+    private void processYearRangeRequest() {
         int minRange;
         int maxRange;
         System.out.println("Enter the earliest year in the range: ");
@@ -196,7 +196,7 @@ public class UserInterface {
         }
     }
 
-    private static void processMakeModelRequest() {
+    private void processMakeModelRequest() {
         String makeModel;
         System.out.println("Enter the make/model of the car: ");
         makeModel = readInputRequireType("string");
@@ -213,7 +213,7 @@ public class UserInterface {
         }
     }
 
-    private static void processPriceRangeRequest() {
+    private void processPriceRangeRequest() {
         double minRange;
         double maxRange;
         System.out.println("Enter the min price range: ");
@@ -236,7 +236,7 @@ public class UserInterface {
         }
     }
 
-    private static void printFormatted(Vehicle car) {
+    private void printFormatted(Vehicle car) {
         NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.US);
 
         System.out.printf("%-8d %-6d %-15s %-18s %-12s %-12s %13s %14s%n",
@@ -250,7 +250,7 @@ public class UserInterface {
                 currency.format(car.getPrice()));
     }
 
-    private static void printMenu() {
+    private void printMenu() {
         System.out.println("""
                 Welcome to the Dealership! What would you like to do?
                 1 - Find vehicles within a price range
@@ -268,7 +268,7 @@ public class UserInterface {
                 """);
     }
 
-    public static void init() {
+    public void init() {
         dealership = DealershipFileManager.getDealership();
     }
 
@@ -276,7 +276,7 @@ public class UserInterface {
     //This method only takes three strings as valid argument for expectedType: "int", "double and "string"
     //for char type I recommend using "string" then using charAt()
     // like char option = readInputRequireType("string").charAt(0)
-    private static String readInputRequireType(String expectedType) {
+    private String readInputRequireType(String expectedType) {
         final Pattern alnum = Pattern.compile("^[a-z0-9]+$");
         final Pattern intPattern = Pattern.compile("^\\d+$");
         final Pattern doublePattern = Pattern.compile("^\\d+(\\.\\d+)?$"); // like 23 or 23.45
