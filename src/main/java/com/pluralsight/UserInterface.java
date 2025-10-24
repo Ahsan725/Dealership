@@ -159,12 +159,13 @@ public class UserInterface {
         System.out.println("Enter the color: ");
         color = readInputRequireType("string");
         boolean anyFound = false;
-
-        for (var car : dealership.getAllVehicles()) {
-            if (car.getColor().equalsIgnoreCase(color)) {
-                printFormatted(car);
-                anyFound = true;
-            }
+        List<Vehicle> result;
+        result = dealership.getVehiclesByColor(color);
+        if (!result.isEmpty()){
+            anyFound = true;
+        }
+        for (var car : result){
+            printFormatted(car);
         }
         if (!anyFound) {
             System.out.println("No cars matched that color!");
