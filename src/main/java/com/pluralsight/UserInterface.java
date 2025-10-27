@@ -270,7 +270,7 @@ public class UserInterface {
                 7 - List ALL vehicles
                 8 - Add a vehicle
                 9 - Remove a vehicle
-                99 - Quit
+                99 - Save and Quit
                 
                 Type in a number corresponding to the action you'd like to do:
                 """);
