@@ -1,8 +1,6 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class DealershipFileManager {
 
@@ -74,5 +72,25 @@ public class DealershipFileManager {
         double price = Double.parseDouble(tokens[7].trim());
 
         return new Vehicle(vin, year, make, model, vehicleType, color, odometer, price);
+    }
+
+    public void saveDealership(Dealership dealership){
+
+        try(BufferedWriter buffWrite = new BufferedWriter(new FileWriter(filename))){
+            buffWrite.write(String.format("%-25s| %-25s| %-25s", getDealership(),getDealership().getAddress(),getDealership().getPhone()));
+            buffWrite.newLine();
+
+            //Write vehicles
+            for(Vehicle v : dealership.getInventory()){
+                String formatVehicle = String.format("%-15s| %-5d| %-15s| %-15s| %-10s| %-8s| %-10s| %-10.2f", v.getVin(),v.getYear(),v.getMake(),v.getModel(),v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice());
+
+                buffWrite.write(formatVehicle);
+                buffWrite.newLine();
+            }
+            System.out.println("Inventory updated successfully!");
+
+        }catch(IOException e){
+            System.out.println("No file found.");
+        }
     }
 }

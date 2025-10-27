@@ -15,15 +15,15 @@ public class UserInterface {
             printMenu();
             operation = Integer.parseInt(readInputRequireType("int"));
             switch (operation) {
-                case 1 -> processPriceRangeRequest();
-                case 2 -> processMakeModelRequest();
-                case 3 -> processYearRangeRequest();
-                case 4 -> processColorRequest();
-                case 5 -> processMileageRangeRequest();
-                case 6 -> processTypeRequest();
-                case 7 -> processAllVehiclesRequest();
-                case 8 -> processAddVehicleRequest();
-                case 9 -> processRemoveVehicleRequest();
+                case 1 ->  processPriceRangeRequest();
+                case 2 ->  processMakeModelRequest();
+                case 3 ->  processYearRangeRequest();
+                case 4 ->  processColorRequest();
+                case 5 ->  processMileageRangeRequest();
+                case 6 ->  processTypeRequest();
+                case 7 ->  processAllVehiclesRequest();
+                case 8 ->  processAddVehicleRequest();
+                case 9 ->  processRemoveVehicleRequest();
                 case 99 -> System.out.println("System is exiting...");
                 default -> System.out.println("Invalid operation... Try again or press 0 to quit");
             }
@@ -202,11 +202,13 @@ public class UserInterface {
         makeModel = readInputRequireType("string");
         boolean anyFound = false;
 
-        for (var car : dealership.getAllVehicles()) {
-            if (car.getMake().toLowerCase().contains(makeModel.toLowerCase()) || car.getModel().toLowerCase().contains(makeModel.toLowerCase())) {
-                printFormatted(car);
-                anyFound = true;
-            }
+        List<Vehicle> result;
+        result = dealership.getVehiclesByMakeModel(makeModel);
+        if (!result.isEmpty()){
+            anyFound = true;
+        }
+        for (var car : result){
+            printFormatted(car);
         }
         if (!anyFound) {
             System.out.println("No cars matched that make/model range!");
@@ -344,4 +346,5 @@ public class UserInterface {
         }
     }
 
+    //TODO: save the list method
 }
