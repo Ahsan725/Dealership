@@ -128,8 +128,4 @@ public class Dealership {
         return result;
     }
 
-    public boolean removeVehicle(int vin) {
-        return false;
-    }
-
 }

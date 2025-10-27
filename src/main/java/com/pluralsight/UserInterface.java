@@ -353,6 +353,4 @@ public class UserInterface {
             }
         }
     }
-
-    //TODO: save the list method
 }
