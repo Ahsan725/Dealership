@@ -109,11 +109,13 @@ public class UserInterface {
         type = readInputRequireType("string");
         boolean anyFound = false;
 
-        for (var car : dealership.getAllVehicles()) {
-            if (car.getVehicleType().toLowerCase().contains(type)) {
-                printFormatted(car);
-                anyFound = true;
-            }
+        List<Vehicle> result;
+        result = dealership.getVehiclesByType(type);
+        if (!result.isEmpty()){
+            anyFound = true;
+        }
+        for (var car : result){
+            printFormatted(car);
         }
         if (!anyFound) {
             System.out.println("No cars matched that type!");
