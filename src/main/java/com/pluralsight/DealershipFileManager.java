@@ -11,7 +11,7 @@ public class DealershipFileManager {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 
-            //Read the first line for dealership meta
+            //Read the first line for dealership data
             String first = br.readLine();
             if (first == null || first.trim().isEmpty()) {
                 throw new IllegalStateException("Inventory file is empty or missing the first line with dealership info");
@@ -29,7 +29,6 @@ public class DealershipFileManager {
 
             dealership = new Dealership(name, address, phone);
 
-            //Read remaining lines for vehicles
             String line;
             while ((line = br.readLine()) != null) {
                 String s = line.trim();
@@ -51,13 +50,17 @@ public class DealershipFileManager {
 
         } catch (IOException e) {
             System.err.println("Could not read file " + filename + ": " + e.getMessage());
-            // Fallback so your app does not crash if file missing
             if (dealership == null) {
                 dealership = new Dealership("Unknown Dealership", "123 Main St", "121-212-2222");
             }
         } catch (IllegalStateException e) {
             System.err.println("Inventory format error: " + e.getMessage());
         }
+
+        if (dealership == null) {
+            return new Dealership("NoName", "NoAddress", "11111111");
+        }
+
         return dealership;
     }
 
@@ -74,23 +77,24 @@ public class DealershipFileManager {
         return new Vehicle(vin, year, make, model, vehicleType, color, odometer, price);
     }
 
-    public void saveDealership(Dealership dealership){
+    public void saveDealership(Dealership dealership) {
+        try (PrintWriter out = new PrintWriter(new FileWriter(filename, false))) {
 
-        try(BufferedWriter buffWrite = new BufferedWriter(new FileWriter(filename))){
-            buffWrite.write(String.format("%-25s| %-25s| %-25s", getDealership(),getDealership().getAddress(),getDealership().getPhone()));
-            buffWrite.newLine();
-
-            //Write vehicles
-            for(Vehicle v : dealership.getInventory()){
-                String formatVehicle = String.format("%-15s| %-5d| %-15s| %-15s| %-10s| %-8s| %-10s| %-10.2f", v.getVin(),v.getYear(),v.getMake(),v.getModel(),v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice());
-
-                buffWrite.write(formatVehicle);
-                buffWrite.newLine();
+            out.print(String.join("|", dealership.getName(), dealership.getAddress(), dealership.getPhone()) + "\n");
+            for (Vehicle v : dealership.getAllVehicles()) {
+                out.printf("%d|%d|%s|%s|%s|%s|%d|%.2f%n",
+                        v.getVin(),
+                        v.getYear(),
+                        v.getMake(),
+                        v.getModel(),
+                        v.getVehicleType(),
+                        v.getColor(),
+                        v.getOdometer(),
+                        v.getPrice());
             }
-            System.out.println("Inventory updated successfully!");
 
-        }catch(IOException e){
-            System.out.println("No file found.");
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + filename);
         }
     }
 }

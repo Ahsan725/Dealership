@@ -1,7 +1,10 @@
 package com.pluralsight;
 
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class UserInterface {
@@ -15,16 +18,21 @@ public class UserInterface {
             printMenu();
             operation = Integer.parseInt(readInputRequireType("int"));
             switch (operation) {
-                case 1 ->  processPriceRangeRequest();
-                case 2 ->  processMakeModelRequest();
-                case 3 ->  processYearRangeRequest();
-                case 4 ->  processColorRequest();
-                case 5 ->  processMileageRangeRequest();
-                case 6 ->  processTypeRequest();
-                case 7 ->  processAllVehiclesRequest();
-                case 8 ->  processAddVehicleRequest();
-                case 9 ->  processRemoveVehicleRequest();
-                case 99 -> System.out.println("System is exiting...");
+                case 1 -> processPriceRangeRequest();
+                case 2 -> processMakeModelRequest();
+                case 3 -> processYearRangeRequest();
+                case 4 -> processColorRequest();
+                case 5 -> processMileageRangeRequest();
+                case 6 -> processTypeRequest();
+                case 7 -> processAllVehiclesRequest();
+                case 8 -> processAddVehicleRequest();
+                case 9 -> processRemoveVehicleRequest();
+                case 99 -> {
+                    System.out.println("System is exiting...");
+                    DealershipFileManager manager = new DealershipFileManager();
+                    manager.saveDealership(dealership);
+                    System.out.println("Changes saved to file");
+                }
                 default -> System.out.println("Invalid operation... Try again or press 0 to quit");
             }
         }
@@ -111,10 +119,10 @@ public class UserInterface {
 
         List<Vehicle> result;
         result = dealership.getVehiclesByType(type);
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             anyFound = true;
         }
-        for (var car : result){
+        for (var car : result) {
             printFormatted(car);
         }
         if (!anyFound) {
@@ -144,10 +152,10 @@ public class UserInterface {
 
         List<Vehicle> result;
         result = dealership.getVehiclesByMileage(minRange, maxRange);
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             anyFound = true;
         }
-        for (var car : result){
+        for (var car : result) {
             printFormatted(car);
         }
         if (!anyFound) {
@@ -163,10 +171,10 @@ public class UserInterface {
         boolean anyFound = false;
         List<Vehicle> result;
         result = dealership.getVehiclesByColor(color);
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             anyFound = true;
         }
-        for (var car : result){
+        for (var car : result) {
             printFormatted(car);
         }
         if (!anyFound) {
@@ -185,10 +193,10 @@ public class UserInterface {
 
         List<Vehicle> result;
         result = dealership.getVehiclesByYear(minRange, maxRange);
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             anyFound = true;
         }
-        for (var car : result){
+        for (var car : result) {
             printFormatted(car);
         }
         if (!anyFound) {
@@ -204,10 +212,10 @@ public class UserInterface {
 
         List<Vehicle> result;
         result = dealership.getVehiclesByMakeModel(makeModel);
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             anyFound = true;
         }
-        for (var car : result){
+        for (var car : result) {
             printFormatted(car);
         }
         if (!anyFound) {
@@ -225,10 +233,10 @@ public class UserInterface {
         boolean anyFound = false;
         List<Vehicle> result;
         result = dealership.getVehiclesByPrice(minRange, maxRange);
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             anyFound = true;
         }
-        for (var car : result){
+        for (var car : result) {
             printFormatted(car);
         }
         if (!anyFound) {
