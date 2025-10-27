@@ -175,23 +175,22 @@ public class UserInterface {
     private void processYearRangeRequest() {
         int minRange;
         int maxRange;
+        boolean anyFound = false;
         System.out.println("Enter the earliest year in the range: ");
         minRange = Integer.parseInt(readInputRequireType("int"));
         System.out.println("Enter the latest year in the range: ");
         maxRange = Integer.parseInt(readInputRequireType("int"));
-        //swap if the user makes a mistake
-        minRange = Math.min(minRange, maxRange);
-        maxRange = Math.max(minRange, maxRange);
-        boolean anyFound = false;
 
-        for (var car : dealership.getAllVehicles()) {
-            if (car.getYear() >= minRange && car.getYear() <= maxRange) {
-                printFormatted(car);
-                anyFound = true;
-            }
+        List<Vehicle> result;
+        result = dealership.getVehiclesByYear(minRange, maxRange);
+        if (!result.isEmpty()){
+            anyFound = true;
+        }
+        for (var car : result){
+            printFormatted(car);
         }
         if (!anyFound) {
-            System.out.println("No cars matched that year range!");
+            System.out.println("No cars matched that color!");
         }
     }
 
