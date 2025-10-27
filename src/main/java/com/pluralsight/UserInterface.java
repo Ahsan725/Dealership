@@ -280,10 +280,6 @@ public class UserInterface {
         dealership = DealershipFileManager.getDealership();
     }
 
-    //created this method to prevent all parsing errors, exceptions, etc for any type of data input from user.
-    //This method only takes three strings as valid argument for expectedType: "int", "double and "string"
-    //for char type I recommend using "string" then using charAt()
-    // like char option = readInputRequireType("string").charAt(0)
     private String readInputRequireType(String expectedType) {
         final Pattern alnum = Pattern.compile("^[a-z0-9]+$");
         final Pattern intPattern = Pattern.compile("^\\d+$");
